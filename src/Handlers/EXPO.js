@@ -1,7 +1,7 @@
 import Parse from "parse";
 import { Expo } from "expo-server-sdk";
 import log from "npmlog";
-import { handleCallback } from "./PushAdapterUtils";
+import { handleCallback } from "../PushAdapterUtils";
 
 const LOG_PREFIX = "parse-server-push-adapter EXPO";
 const EXPOTimeToLiveMax = 4 * 7 * 24 * 60 * 60; // GCM allows a max of 4 weeks
