@@ -4,7 +4,7 @@ import log from 'npmlog';
 import APNS from './APNS';
 import GCM from './GCM';
 import FCM from './FCM';
-import EXPO from './EXPO'
+import EXPO from './Handlers/EXPO'
 import { classifyInstallations } from './PushAdapterUtils';
 
 const LOG_PREFIX = 'parse-server-push-adapter';
@@ -48,7 +48,10 @@ export default class ParsePushAdapter {
           }
           break;
         case 'epxo':
-          this.senderMap[pushType] = new EXPO(pushConfig[pushType]);
+          console.log('pushConfig', pushConfig)
+          const ExpoObject = new EXPO(pushConfig[pushType]);
+          console.log('init EXPO', ExpoObject)
+          this.senderMap[pushType] = ExpoObject
           break;  
       }
     }
