@@ -4,7 +4,7 @@ import log from 'npmlog';
 import APNS from './APNS';
 import GCM from './GCM';
 import FCM from './FCM';
-import EXPO from './Expo'
+import EXPO from './EXPO'
 import { classifyInstallations } from './PushAdapterUtils';
 
 const LOG_PREFIX = 'parse-server-push-adapter';
@@ -62,10 +62,12 @@ export default class ParsePushAdapter {
     return classifyInstallations(installations, validTypes)
   }
 
-  send(data, installations) {
+  async send(data, installations) {
     let deviceMap = classifyInstallations(installations, this.validPushTypes);
     let sendPromises = [];
     for (let pushType in deviceMap) {
+      console.log('deviceMap', deviceMap)
+      console.log('senderMap', this.senderMap)
       let sender = this.senderMap[pushType];
       let devices = deviceMap[pushType];
 
@@ -85,9 +87,7 @@ export default class ParsePushAdapter {
         }
       }
     }
-    return Promise.all(sendPromises).then((promises) => {
-      // flatten all
-      return [].concat.apply([], promises);
-    })
+    const promises = await Promise.all(sendPromises);
+    return [].concat.apply([], promises);
   }
 }
