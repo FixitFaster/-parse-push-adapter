@@ -136,12 +136,18 @@ function generateGCMPayload(requestData, pushId, timeStamp, expirationTime) {
     push_id: pushId,
     time: new Date(timeStamp).toISOString()
   }
-  const optionalKeys = ['contentAvailable', 'notification'];
-  optionalKeys.forEach((key) => {
-    if (requestData.hasOwnProperty(key)) {
-      payload[key] = requestData[key];
-    }
-  });
+  // const optionalKeys = ['contentAvailable', 'notification'];
+  // optionalKeys.forEach((key) => {
+  //   if (requestData.hasOwnProperty(key)) {
+  //     payload[key] = requestData[key];
+  //   }
+  // });
+  if (requestData.content_available) {
+    payload.content_available = requestData.content_available;
+  }
+  if (requestData.notification) {
+    payload.notification = requestData.notification;
+  }
 
   if (expirationTime) {
    // The timeStamp and expiration is in milliseconds but gcm requires second

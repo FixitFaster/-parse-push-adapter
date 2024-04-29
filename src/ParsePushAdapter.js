@@ -4,6 +4,7 @@ import log from 'npmlog';
 import APNS from './APNS';
 import GCM from './GCM';
 import FCM from './FCM';
+import EXPO from './Expo'
 import { classifyInstallations } from './PushAdapterUtils';
 
 const LOG_PREFIX = 'parse-server-push-adapter';
@@ -13,7 +14,7 @@ export default class ParsePushAdapter {
   supportsPushTracking = true;
 
   constructor(pushConfig = {}) {
-    this.validPushTypes = ['ios', 'osx', 'tvos', 'android', 'fcm'];
+    this.validPushTypes = ['ios', 'osx', 'tvos', 'android', 'fcm', 'expo'];
     this.senderMap = {};
     // used in PushController for Dashboard Features
     this.feature = {
@@ -27,6 +28,7 @@ export default class ParsePushAdapter {
         throw new Parse.Error(Parse.Error.PUSH_MISCONFIGURED,
                              'Push to ' + pushType + ' is not supported');
       }
+      console.log('pushType', pushType)
       switch (pushType) {
         case 'ios':
         case 'tvos':
@@ -45,6 +47,9 @@ export default class ParsePushAdapter {
             this.senderMap[pushType] = new GCM(pushConfig[pushType]);
           }
           break;
+        case 'epxo':
+          this.senderMap[pushType] = new EXPO(pushConfig[pushType]);
+          break;  
       }
     }
   }

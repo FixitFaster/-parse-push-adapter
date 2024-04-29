@@ -1,0 +1,11 @@
+language: node_js
+dist: jammy
+node_js:
+  - '18'
+after_success: "./node_modules/.bin/codecov"
+deploy:
+  provider: npm
+  api_key: $NPM_TOKEN
+  on:
+    tags: true
+    repo: parse-server-modules/parse-server-push-adapter
