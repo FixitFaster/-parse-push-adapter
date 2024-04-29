@@ -1,4 +1,5 @@
 import { randomBytes } from 'crypto';
+import axios from 'axios';
 
 /**g
    * Classify the device token of installations based on its device type.
@@ -42,4 +43,16 @@ export function randomString(size) {
     objectId += chars[bytes.readUInt8(i) % chars.length];
   }
   return objectId;
+}
+
+// Post receipt back to webhook url
+export async function handleCallback(webhookurl, pushStatusData) {
+  try {
+    const response = await axios.post(webhookurl, {
+      pushStatusData: pushStatusData,
+    });
+    console.log("Callback request completed", { response });
+  } catch (error) {
+    console.error("Callback request failed", { error });
+  }
 }
