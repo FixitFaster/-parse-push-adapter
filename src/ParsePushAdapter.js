@@ -47,7 +47,7 @@ export default class ParsePushAdapter {
             this.senderMap[pushType] = new GCM(pushConfig[pushType]);
           }
           break;
-        case 'epxo':
+        case 'expo':
           console.log('pushConfig', pushConfig)
           const ExpoObject = new EXPO(pushConfig[pushType]);
           console.log('init EXPO', ExpoObject)
