@@ -48,9 +48,7 @@ export default class ParsePushAdapter {
           }
           break;
         case 'expo':
-          console.log('pushConfig', pushConfig)
           const ExpoObject = new EXPO(pushConfig[pushType]);
-          console.log('init EXPO', ExpoObject)
           this.senderMap[pushType] = ExpoObject
           break;  
       }
@@ -69,8 +67,6 @@ export default class ParsePushAdapter {
     let deviceMap = classifyInstallations(installations, this.validPushTypes);
     let sendPromises = [];
     for (let pushType in deviceMap) {
-      console.log('deviceMap', deviceMap)
-      console.log('senderMap', this.senderMap)
       let sender = this.senderMap[pushType];
       let devices = deviceMap[pushType];
 
