@@ -12,7 +12,7 @@ if (process.env.VERBOSE || process.env.VERBOSE_PARSE_SERVER_PUSH_ADAPTER) {
 import ParsePushAdapter from './ParsePushAdapter';
 import GCM from './GCM';
 import APNS from './APNS';
-import EXPO from './Expo'
+import EXPO from './Handlers/EXPO'
 import * as utils from './PushAdapterUtils';
 
 export default ParsePushAdapter;
