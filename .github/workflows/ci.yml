@@ -1,46 +1,31 @@
-name: ci
-on:
-  push:
-    branches:
-      - master
-  pull_request:
-    branches:
-      - '**'
+name: Node.js CI
+
+on: [push, pull_request]
+
 jobs:
-  test:
+  build:
+    runs-on: ubuntu-latest
+
     strategy:
       matrix:
-        include:
-          - name: Node.js 14
-            NODE_VERSION: 14
-          - name: Node.js 16
-            NODE_VERSION: 16
-          - name: Node.js 18
-            NODE_VERSION: 18
-          - name: Node.js 20
-            NODE_VERSION: 20
-      fail-fast: false
-    name: ${{ matrix.name }}
-    timeout-minutes: 15
-    runs-on: ubuntu-latest
+        node-version: [14.x, 16.x, 18.x, 20.x]
+
     steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.NODE_VERSION }}
-        uses: actions/setup-node@v1
+      - uses: actions/checkout@v3
         with:
-          node-version: ${{ matrix.NODE_VERSION }}
-      - name: Cache Node.js modules
-        uses: actions/cache@v2
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ matrix.NODE_VERSION }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-              ${{ runner.os }}-node-${{ matrix.NODE_VERSION }}-
+          node-version: ${{ matrix.node-version }}
+          cache: "yarn"
+
       - name: Install dependencies
-        run: npm ci
-      - name: Build package
-        run: npm run build
+        run: yarn install
+
+      - name: Build the project
+        run: yarn build
+
       - name: Run tests
-        run: npm run test
-      - name: Code coverage
-        run: bash <(curl -s https://codecov.io/bash)
+        run: yarn test
