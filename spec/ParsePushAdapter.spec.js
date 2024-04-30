@@ -142,13 +142,13 @@ describe('ParsePushAdapter', () => {
   it('can get valid push types', (done) => {
     var parsePushAdapter = new ParsePushAdapter();
 
-    expect(parsePushAdapter.getValidPushTypes()).toEqual(['ios', 'osx', 'tvos', 'android', 'fcm']);
+    expect(parsePushAdapter.getValidPushTypes()).toEqual(['ios', 'osx', 'tvos', 'android', 'fcm', 'expo']);
     done();
   });
 
   it('can classify installation', (done) => {
     // Mock installations
-    var validPushTypes = ['ios', 'osx', 'tvos', 'android', 'fcm'];
+    var validPushTypes = ['ios', 'osx', 'tvos', 'android', 'fcm', 'expo'];
     var installations = [
       {
         deviceType: 'android',
@@ -173,7 +173,7 @@ describe('ParsePushAdapter', () => {
       {
         deviceType: 'android',
         deviceToken: undefined
-      }
+      },
     ];
 
     var deviceMap = ParsePushAdapter.classifyInstallations(installations, validPushTypes);
