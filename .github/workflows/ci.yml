@@ -1,31 +1,44 @@
-name: Node.js CI
+name: ci
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - "**"
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
+  test:
     strategy:
       matrix:
-        node-version: [14.x, 16.x, 18.x, 20.x]
+        include:
+          - name: Node.js 18
+            NODE_VERSION: 18
+          - name: Node.js 20
+            NODE_VERSION: 20
+      fail-fast: false
+    name: ${{ matrix.name }}
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+      - uses: actions/checkout@v2
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Use Node.js ${{ matrix.NODE_VERSION }}
+        uses: actions/setup-node@v1
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: "yarn"
+          node-version: ${{ matrix.NODE_VERSION }}
+          cache: "yarn" # Enables caching of Yarn dependencies
 
       - name: Install dependencies
-        run: yarn install
+        run: yarn install --frozen-lockfile
 
-      - name: Build the project
+      - name: Build package
         run: yarn build
 
       - name: Run tests
         run: yarn test
+
+      - name: Code coverage
+        run: bash <(curl -s https://codecov.io/bash)
