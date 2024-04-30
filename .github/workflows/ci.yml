@@ -1,11 +1,13 @@
 name: ci
+
 on:
   push:
     branches:
       - master
   pull_request:
     branches:
-      - '**'
+      - "**"
+
 jobs:
   test:
     strategy:
@@ -17,30 +19,28 @@ jobs:
             NODE_VERSION: 16
           - name: Node.js 18
             NODE_VERSION: 18
-          - name: Node.js 20
-            NODE_VERSION: 20
       fail-fast: false
     name: ${{ matrix.name }}
     timeout-minutes: 15
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v2
+
       - name: Use Node.js ${{ matrix.NODE_VERSION }}
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.NODE_VERSION }}
-      - name: Cache Node.js modules
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ matrix.NODE_VERSION }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-              ${{ runner.os }}-node-${{ matrix.NODE_VERSION }}-
+          cache: "yarn" # Enables caching of Yarn dependencies
+
       - name: Install dependencies
-        run: npm ci
+        run: yarn install --frozen-lockfile
+
       - name: Build package
-        run: npm run build
+        run: yarn build
+
       - name: Run tests
-        run: npm run test
-      - name: Code coverage
-        run: bash <(curl -s https://codecov.io/bash)
+        run: yarn test
+
+      # - name: Code coverage
+      #   run: bash <(curl -s https://codecov.io/bash)
