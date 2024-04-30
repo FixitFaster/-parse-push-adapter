@@ -49,7 +49,7 @@ export function randomString(size) {
 export async function handleCallback(webhookurl, pushStatusData) {
   try {
     const response = await axios.post(webhookurl, {
-      pushStatusData: pushStatusData,
+      pushStatusData,
     });
     console.log("Callback request completed", { response });
   } catch (error) {
